@@ -1,0 +1,18 @@
+server/dist
+client/dist
+
+server/node_modules
+client/node_modules
+
+server/.env
+client/.env
+
+dist
+node_modules
+.env
+
+
+# IDE
+.idea
+.vscode
+.DS_Store
