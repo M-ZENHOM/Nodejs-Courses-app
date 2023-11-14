@@ -19,7 +19,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(helmet());
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use(
+  cors({
+    credentials: true,
+    origin:
+      process.env.NODE_ENV === "production"
+        ? process.env.PRODUCTION_URL
+        : "http://localhost:5173",
+  })
+);
 
 app.use("/api/courses", courseRouter);
 app.use("/api/auth", authRouter);

@@ -7,7 +7,7 @@ const LogoutBtn = () => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     async function logout() {
-        await axios.get('http://localhost:5000/api/auth/logout')
+        await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/logout`)
         localStorage.removeItem("user")
         dispatch(userLogout())
         navigate('/')

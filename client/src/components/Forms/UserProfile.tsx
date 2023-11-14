@@ -26,11 +26,10 @@ export default function UserProfile({ userData }: { userData: { user: { _id: str
         try {
             console.log(values);
 
-            await axios.put(`http://localhost:5000/api/users/${userData.user._id}`, {
+            await axios.put(`${import.meta.env.VITE_API_URL}/api/users/${userData.user._id}`, {
                 name: values.name,
                 email: values.email
             }).then((res) => {
-                console.log(res.data.data);
                 dispatch(setUser({
                     _id: res.data.data.user._id,
                     name: res.data.data.user.name,

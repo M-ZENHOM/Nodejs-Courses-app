@@ -21,15 +21,15 @@ export default function Profile() {
     const currentUser = useAppSelector(state => state.currentUser)
     const { data: userData } = useQuery({
         queryKey: ['user', currentUser],
-        queryFn: () => axios.get(`http://localhost:5000/api/users/${currentUser?._id}`).then((response) => response.data.data),
+        queryFn: () => axios.get(`${import.meta.env.VITE_API_URL}/api/users/${currentUser?._id}`).then((response) => response.data.data),
     })
     const { data: userCourses } = useQuery({
         queryKey: ["userCourses"],
-        queryFn: () => axios.get(`http://localhost:5000/api/courses/userCourses/${currentUser?._id}`).then((response) => response.data.data),
+        queryFn: () => axios.get(`${import.meta.env.VITE_API_URL}/api/courses/userCourses/${currentUser?._id}`).then((response) => response.data.data),
     })
     async function handleDelete(id: string) {
         try {
-            await axios.delete(`http://localhost:5000/api/courses/${id}`, { headers: { 'userId': `${currentUser?._id}` } })
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/courses/${id}`, { headers: { 'userId': `${currentUser?._id}` } })
                 .then(() => { toast.success('Course Deleted Successfully'), location.reload() })
                 .catch(error => toast.error(error.response.data.message))
         } catch (error) {

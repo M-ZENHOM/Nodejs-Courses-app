@@ -21,7 +21,7 @@ export default function AddCourse() {
 
     async function onSubmit(values: z.infer<typeof courseSchema>) {
         try {
-            await axios.post('http://localhost:5000/api/courses', {
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/courses`, {
                 title: values.title,
                 price: Number(values.price),
                 userOwner: currentUser?._id

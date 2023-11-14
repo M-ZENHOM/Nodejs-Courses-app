@@ -9,7 +9,7 @@ const DeleteUser = ({ userId }: { userId: string }) => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     async function deleteUser() {
-        await axios.delete(`http://localhost:5000/api/users/${userId}`)
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/users/${userId}`)
         dispatch(userLogout())
         navigate('/')
     }

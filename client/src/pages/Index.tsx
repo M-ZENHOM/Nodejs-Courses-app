@@ -23,7 +23,7 @@ function Index() {
   const page = useLocation().search || "?page=1"
   const { isPending, data } = useQuery<Courses>({
     queryKey: ['courses', page],
-    queryFn: () => axios.get(`http://localhost:5000/api/courses${page}&limit=6`).then((response) => response.data.data),
+    queryFn: () => axios.get(`${import.meta.env.VITE_API_URL}/api/courses${page}&limit=6`).then((response) => response.data.data),
   })
 
 
