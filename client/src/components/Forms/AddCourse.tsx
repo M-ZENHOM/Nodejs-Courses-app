@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import axios from 'axios'
 import { useForm } from "react-hook-form"
-import { Navigate, useNavigate } from "react-router-dom"
+import { Navigate } from "react-router-dom"
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { courseSchema } from "../../Schemas/Course"
@@ -12,7 +12,6 @@ import { Input } from "../Input"
 
 export default function AddCourse() {
     const currentUser = useAppSelector(state => state.currentUser)
-    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -23,9 +22,8 @@ export default function AddCourse() {
         try {
             await axios.post(`${import.meta.env.VITE_API_URL}/api/courses`, {
                 title: values.title,
-                price: Number(values.price),
-                userOwner: currentUser?._id
-            }).then(() => { toast.success('Course Added Successfully'), navigate('/') }).catch(error => toast.error(error.response.data.message))
+                price: Number(values.price)
+            }).then(() => { toast.success('Course Added Successfully') }).catch(error => toast.error(error.response.data.message))
         } catch (error) {
             return error
         }
