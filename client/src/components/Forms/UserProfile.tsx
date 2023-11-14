@@ -24,8 +24,6 @@ export default function UserProfile({ userData }: { userData: { user: { _id: str
 
     async function onSubmit(values: z.infer<typeof userProfileSchema>) {
         try {
-            console.log(values);
-
             await axios.put(`${import.meta.env.VITE_API_URL}/api/users/${userData.user._id}`, {
                 name: values.name,
                 email: values.email
@@ -43,7 +41,7 @@ export default function UserProfile({ userData }: { userData: { user: { _id: str
 
     return (
         <form className="flex flex-col justify-center items-center space-y-4 w-full max-w-xs" onSubmit={handleSubmit(onSubmit)}>
-            <img className="w-20 h-20 rounded-full" src={`http://localhost:5000/${userData?.user.avatar}`} />
+            <img className="w-20 h-20 rounded-full" src={`${import.meta.env.VITE_API_URL}/${userData?.user.avatar}`} />
             <Input name="name" placeholder="name" type="text" register={register} defaultValue={userData?.user.name} />
             {errors.name && <ErrorLabel>{errors.name.message}</ErrorLabel>}
             <Input name="email" placeholder="email" type="email" register={register} defaultValue={userData?.user.email} />

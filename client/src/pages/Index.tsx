@@ -31,8 +31,8 @@ function Index() {
     <Wrapper className="flex flex-col justify-center items-center pb-20" >
       {isPending ?
         <div className="grid grid-cols-1 px-4 md:px-0 md:grid-cols-3 place-items-center gap-3 pb-20">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <Card key={i} className="p-6 space-y-4 w-full max-w-xs" >
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Card key={i} className="p-6 space-y-4 w-full max-w-xs min-h-[150px]" >
               <Skeleton className="w-40 h-4" />
               <Skeleton className="w-20 h-4" />
             </Card>))}
@@ -40,7 +40,7 @@ function Index() {
         : <div className="grid grid-cols-1 px-4 md:px-0 md:grid-cols-3 place-items-center gap-3 pb-20">
           {data?.courses.map((course: course) => (
             <Link className="w-full" key={course._id} to={`/courses/${course._id}`}>
-              <Card className="p-6 space-y-4 w-full max-w-xs" >
+              <Card className="p-6 space-y-4 w-full max-w-xs min-h-[150px]" >
                 <CardTitle>{course.title}</CardTitle>
                 <CardDescription>Price: {course.price}$</CardDescription>
               </Card>
