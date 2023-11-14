@@ -33,9 +33,9 @@ export default function AddCourse() {
 
     return (
         <form className="flex flex-col justify-center items-center space-y-4 py-24 " onSubmit={handleSubmit(onSubmit)}>
-            <Input name="title" placeholder="title" type="text" register={register} />
+            <Input name="title" placeholder="Title" type="text" register={register} />
             {errors.title && <ErrorLabel>{errors.title.message}</ErrorLabel>}
-            <Input name="price" placeholder="price" type="number" register={register} />
+            <Input name="price" placeholder="Price" type="number" register={register} />
             {errors.price && <ErrorLabel>{errors.price.message}</ErrorLabel>}
             <Button className="w-full max-w-xs" type="submit" >Add New Course</Button>
         </form>

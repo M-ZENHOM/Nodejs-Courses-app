@@ -16,12 +16,12 @@ export default function CoursePage() {
     })
     return (
         <>
-            {isPending ? <div className="text-center text-2xl">
+            {isPending ? <div className="flex flex-col justify-center items-center space-y-3">
                 <Skeleton className="w-40 h-4" />
                 <Skeleton className="w-20 h-4" />
             </div>
-                : <div className="text-center text-2xl">
-                    <h2>{data?.title}</h2>
+                : <div className="text-center text-2xl space-y-3">
+                    <h2 className="font-extrabold text-2xl tracking-tight">{data?.title}</h2>
                     <span>{data?.price}$</span>
                 </div>}
         </>

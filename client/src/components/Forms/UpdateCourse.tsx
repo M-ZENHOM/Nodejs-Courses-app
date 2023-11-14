@@ -44,9 +44,9 @@ export default function UpdateCourse({ id }: { id: string }) {
 
     return (
         <form className="flex flex-col justify-center items-center space-y-4 py-24 " onSubmit={handleSubmit(onSubmit)}>
-            <Input name="title" placeholder="title" type="text" defaultValue={data?.title} register={register} />
+            <Input name="title" placeholder="Title" type="text" defaultValue={data?.title} register={register} />
             {errors.title && <ErrorLabel>{errors.title.message}</ErrorLabel>}
-            <Input name="price" placeholder="price" type="text" defaultValue={data?.price} register={register} />
+            <Input name="price" placeholder="Price" type="text" defaultValue={data?.price} register={register} />
             {errors.price && <ErrorLabel>{errors.price.message}</ErrorLabel>}
             <Button className="w-full max-w-xs" type="submit" >Update  Course</Button>
         </form>

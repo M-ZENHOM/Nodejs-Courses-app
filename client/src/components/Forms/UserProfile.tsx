@@ -43,9 +43,9 @@ export default function UserProfile({ userData, userDataPending }: { userData: {
     return (
         <form className="flex flex-col justify-center items-center space-y-4 w-full max-w-xs" onSubmit={handleSubmit(onSubmit)}>
             {userDataPending ? <Skeleton className="w-20 h-20 rounded-full" /> : <img className="w-20 h-20 rounded-full" src={`${import.meta.env.VITE_API_URL}/${userData?.user.avatar}`} />}
-            <Input name="name" placeholder="name" type="text" register={register} defaultValue={userDataPending ? "Username" : userData?.user.name} />
+            <Input name="name" placeholder="Username" type="text" register={register} defaultValue={userData?.user.name} />
             {errors.name && <ErrorLabel>{errors.name.message}</ErrorLabel>}
-            <Input name="email" placeholder="email" type="email" register={register} defaultValue={userDataPending ? "Email" : userData?.user.email} />
+            <Input name="email" placeholder="Email" type="email" register={register} defaultValue={userData?.user.email} />
             {errors.email && <ErrorLabel>{errors.email.message}</ErrorLabel>}
             <Button className="w-full max-w-xs" type="submit" >Update</Button>
             <Link to="/create-course" className={cn(buttonVariants({ variant: "default" }), "w-full bg-green-500 hover:bg-green-700")}>Create Course</Link>

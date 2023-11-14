@@ -42,11 +42,11 @@ export default function Login() {
 
     return (
         <form className="flex flex-col justify-center items-center space-y-4 py-24 " onSubmit={handleSubmit(onSubmit)}>
-            <Input name="email" placeholder="email" type="email" register={register} />
+            <Input name="email" placeholder="Email" type="email" register={register} />
             {errors.email && <ErrorLabel>{errors.email.message}</ErrorLabel>}
             <Input
                 name="password"
-                placeholder="password"
+                placeholder="Password"
                 type="password"
                 register={register}
             />
