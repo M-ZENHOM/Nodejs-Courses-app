@@ -13,7 +13,7 @@ const getAllCourses = asyncWrapper(async (req, res) => {
   if (title) {
     query.title = { $regex: title, $options: "i" };
   }
-  const courses = await Course.find({ query }, { __v: false })
+  const courses = await Course.find(query, { __v: false })
     .limit(limit)
     .skip((page - 1) * limit);
   // .where({ title: { $regex: title, $options: "i" } });
