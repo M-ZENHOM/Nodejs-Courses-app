@@ -5,15 +5,18 @@ const { SUCCESS, FAIL } = require("../utils/statusText");
 const User = require("../models/user.model");
 
 const getAllCourses = asyncWrapper(async (req, res) => {
-  const { limit = 2, page = 1 } = req.query;
+  const { limit = 2, page = 1, title } = req.query;
 
   const coursesLength = (await Course.find({}, { __v: false })).length;
   const totalPages = Math.ceil(coursesLength / limit);
-
-  const courses = await Course.find({}, { __v: false })
+  const query = {};
+  if (title) {
+    query.title = { $regex: title, $options: "i" };
+  }
+  const courses = await Course.find({ query }, { __v: false })
     .limit(limit)
-    .skip((page - 1) * limit)
-    .where({ title: { $regex: req.query.title, $options: "i" } });
+    .skip((page - 1) * limit);
+  // .where({ title: { $regex: title, $options: "i" } });
 
   res.json({ status: SUCCESS, data: { pages: totalPages, courses, page } });
 });
