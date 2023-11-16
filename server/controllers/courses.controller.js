@@ -12,10 +12,12 @@ const getAllCourses = asyncWrapper(async (req, res) => {
 
   const courses = await Course.find({}, { __v: false })
     .limit(limit)
-    .skip((page - 1) * limit);
+    .skip((page - 1) * limit)
+    .where({ title: { $regex: req.query.title, $options: "i" } });
 
   res.json({ status: SUCCESS, data: { pages: totalPages, courses, page } });
 });
+
 const getUserCourses = asyncWrapper(async (req, res) => {
   const user = await User.findById(req.params.userId).populate(
     "courseList",
@@ -77,4 +79,5 @@ module.exports = {
   updateCourse,
   deleteCourse,
   getUserCourses,
+  searchCourses,
 };
