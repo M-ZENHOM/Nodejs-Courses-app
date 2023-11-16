@@ -79,5 +79,4 @@ module.exports = {
   updateCourse,
   deleteCourse,
   getUserCourses,
-  searchCourses,
 };
