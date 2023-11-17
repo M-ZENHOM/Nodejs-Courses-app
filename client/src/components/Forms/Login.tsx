@@ -23,7 +23,7 @@ export default function Login() {
 
     async function onSubmit(values: z.infer<typeof LoginSchema>) {
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+            await axios.post(`${import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:5000"}/api/auth/login`, {
                 email: values.email,
                 password: values.password
             }).then((res) => {

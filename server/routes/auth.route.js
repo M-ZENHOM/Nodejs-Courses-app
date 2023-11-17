@@ -1,8 +1,7 @@
-const { Router } = require("express");
+const router = require("express").Router();
 const multer = require("multer");
 const { register, login, logout } = require("../controllers/auth.controller");
-const verfiyToken = require("../middlewares/verfiyToken");
-const router = Router();
+const { verfiyToken } = require("../middlewares");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

@@ -27,11 +27,11 @@ export default function UpdateCourse({ id }: { id: string }) {
     } = useForm<z.infer<typeof UpdateCourseSchema>>({ resolver: zodResolver(UpdateCourseSchema) })
     const { error, data } = useQuery({
         queryKey: ["courseId", id],
-        queryFn: async () => await axios.get(`${import.meta.env.VITE_API_URL}/api/courses/${id}`).then(res => res.data.data.course)
+        queryFn: async () => await axios.get(`${import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:5000"}/api/courses/${id}`).then(res => res.data.data.course)
     })
     async function onSubmit(values: z.infer<typeof UpdateCourseSchema>) {
         try {
-            await axios.patch(`${import.meta.env.VITE_API_URL}/api/courses/${id}`, { ...values, })
+            await axios.patch(`${import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:5000"}/api/courses/${id}`, { ...values, })
                 .then(() => { toast.success('Course Updated Successfully'), navigate('/profile') })
                 .catch(error => toast.error(error.response.data.message))
         } catch (error) {

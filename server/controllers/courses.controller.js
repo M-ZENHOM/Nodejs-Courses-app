@@ -1,24 +1,26 @@
-const asyncWrapper = require("../middlewares/asyncWrapper");
 const Course = require("../models/course.model");
 const errorMsg = require("../utils/errorMsg");
 const { SUCCESS, FAIL } = require("../utils/statusText");
 const User = require("../models/user.model");
+const { asyncWrapper } = require("../middlewares");
 
 const getAllCourses = asyncWrapper(async (req, res) => {
-  const { limit = 2, page = 1, title } = req.query;
-
-  const coursesLength = (await Course.find({}, { __v: false })).length;
-  const totalPages = Math.ceil(coursesLength / limit);
+  const { limit = 3, page = 1, title, sort = "new" } = req.query;
   const query = {};
   if (title) {
     query.title = { $regex: title, $options: "i" };
   }
+  const count = await Course.countDocuments(query);
+  const totalPages = Math.ceil(count / limit);
   const courses = await Course.find(query, { __v: false })
     .limit(limit)
-    .skip((page - 1) * limit);
-  // .where({ title: { $regex: title, $options: "i" } });
+    .skip((page - 1) * limit)
+    .sort({ createdAt: sort === "new" ? -1 : 1 });
 
-  res.json({ status: SUCCESS, data: { pages: totalPages, courses, page } });
+  res.json({
+    status: SUCCESS,
+    data: { pagination: { pages: totalPages, page, count }, courses },
+  });
 });
 
 const getUserCourses = asyncWrapper(async (req, res) => {

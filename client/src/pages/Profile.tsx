@@ -22,15 +22,15 @@ export default function Profile() {
     const currentUser = useAppSelector(state => state.currentUser)
     const { data: userData, isPending: userDataPending } = useQuery({
         queryKey: ['user', currentUser],
-        queryFn: () => axios.get(`${import.meta.env.VITE_API_URL}/api/users/${currentUser?._id}`).then((response) => response.data.data),
+        queryFn: () => axios.get(`${import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:5000"}/api/users/${currentUser?._id}`).then((response) => response.data.data),
     })
     const { data: userCourses, isPending } = useQuery({
         queryKey: ["userCourses"],
-        queryFn: () => axios.get(`${import.meta.env.VITE_API_URL}/api/courses/userCourses/${currentUser?._id}`).then((response) => response.data.data),
+        queryFn: () => axios.get(`${import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:5000"}/api/courses/userCourses/${currentUser?._id}`).then((response) => response.data.data),
     })
     async function handleDelete(id: string) {
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}/api/courses/${id}`, { headers: { 'userId': `${currentUser?._id}` } })
+            await axios.delete(`${import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:5000"}/api/courses/${id}`, { headers: { 'userId': `${currentUser?._id}` } })
                 .then(() => { toast.success('Course Deleted Successfully'), location.reload() })
                 .catch(error => toast.error(error.response.data.message))
         } catch (error) {
@@ -53,11 +53,11 @@ export default function Profile() {
                         </Card>))
                     : userCourses?.courses.length > 0 ? userCourses?.courses.map((course: CourseType) => (
                         <Card key={course._id} className="p-6 space-y-4 w-full max-w-xs" >
-                            <div className="flex justify-between items-center">
+                            <div className="flex justify-between items-center space-x-4">
                                 <CardTitle>{course.title}</CardTitle>
-                                <div className="space-y-3 flex flex-col items-center justify-center">
-                                    <Link className={cn(buttonVariants({ variant: "outline" }))} to={`/update-course/${course._id}`}><Icons.Edit /></Link>
-                                    <Button onClick={() => handleDelete(course._id)} size="icon" variant="outline"><Icons.Delete /></Button>
+                                <div className="space-x-3 flex  items-center justify-center">
+                                    <Link className={cn(buttonVariants({ variant: "default" }))} to={`/update-course/${course._id}`}><Icons.Edit /></Link>
+                                    <Button className="w-10" onClick={() => handleDelete(course._id)} size="icon" variant="destructive"><Icons.Delete /></Button>
                                 </div>
                             </div>
                             <CardDescription>{course.price}$</CardDescription>

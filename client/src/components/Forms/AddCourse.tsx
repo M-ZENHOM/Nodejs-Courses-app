@@ -20,9 +20,10 @@ export default function AddCourse() {
 
     async function onSubmit(values: z.infer<typeof courseSchema>) {
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/api/courses`, {
+            await axios.post(`${import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:5000"}/api/courses`, {
                 title: values.title,
-                price: Number(values.price)
+                price: Number(values.price),
+                userOwner: currentUser?._id
             }).then(() => { toast.success('Course Added Successfully') }).catch(error => toast.error(error.response.data.message))
         } catch (error) {
             return error

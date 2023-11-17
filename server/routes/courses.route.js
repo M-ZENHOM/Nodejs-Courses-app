@@ -7,10 +7,8 @@ const {
   deleteCourse,
   getUserCourses,
 } = require("../controllers/courses.controller");
+const { verfiyToken, validator, allowedTo } = require("../middlewares");
 const { courseSchema } = require("../schemas/courses.schema");
-const verfiyToken = require("../middlewares/verfiyToken");
-const allowedTo = require("../middlewares/allowedTo");
-const { validator } = require("../middlewares");
 
 router.route("/userCourses/:userId").get(verfiyToken, getUserCourses);
 router

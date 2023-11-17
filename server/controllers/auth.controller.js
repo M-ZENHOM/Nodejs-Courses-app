@@ -1,8 +1,7 @@
-const asyncWrapper = require("../middlewares/asyncWrapper");
 const User = require("../models/user.model");
 const { SUCCESS, FAIL } = require("../utils/statusText");
 const bcrypt = require("bcrypt");
-const { generateToken } = require("../middlewares");
+const { generateToken, asyncWrapper } = require("../middlewares");
 const errorMsg = require("../utils/errorMsg");
 
 const register = asyncWrapper(async (req, res, next) => {
