@@ -44,7 +44,7 @@ export default function Profile() {
         <Wrapper className="flex flex-col justify-center items-center">
             <UserProfile userData={userData} userDataPending={userDataPending} />
             <button onClick={() => setShowcourse(!showCourse)} className="text-green-500 py-4 text-center">{!showCourse ? "Show Courses 👇" : "Hide Courses 👆"}</button>
-            {showCourse && <div className="grid grid-cols-2 gap-3 py-5 ">
+            {showCourse && <div className="grid grid-cols-1 md:grid-cols-2 gap-3 py-5 px-4 ">
                 {isPending ?
                     Array.from({ length: 2 }).map((_, i) => (
                         <Card key={i} className="p-6 space-y-4 w-full max-w-md min-h-[130px]" >
@@ -55,14 +55,14 @@ export default function Profile() {
                         <Card key={course._id} className="p-6 space-y-4 w-full max-w-xs" >
                             <div className="flex justify-between items-center space-x-4">
                                 <CardTitle>{course.title}</CardTitle>
-                                <div className="space-x-3 flex  items-center justify-center">
+                                <div className="md:space-y-0 md:space-x-3 space-y-3 space-x-0 flex md:flex-row flex-col  items-center justify-center">
                                     <Link className={cn(buttonVariants({ variant: "default" }))} to={`/update-course/${course._id}`}><Icons.Edit /></Link>
                                     <Button className="w-10" onClick={() => handleDelete(course._id)} size="icon" variant="destructive"><Icons.Delete /></Button>
                                 </div>
                             </div>
                             <CardDescription>{course.price}$</CardDescription>
                         </Card>
-                    )) : <p className="text-red-500">You don't have any courses ❌</p>}
+                    )) : <p className="text-red-500 ">You don't have any courses ❌</p>}
             </div>}
         </Wrapper>
     )

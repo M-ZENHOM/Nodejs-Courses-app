@@ -36,17 +36,17 @@ function Index() {
   })
   const handelSearch = () => {
     if (deboucedQuery !== "")
-      setSearchParams({ title: deboucedQuery })
+      setSearchParams({ title: deboucedQuery, sort: searchParams.get('sort') ?? "new" })
   }
   return (
     // Refactor Styles later!
     <Wrapper className="flex flex-col justify-center items-center pb-20" >
-      <div className="flex items-center justify-center w-full max-w-lg mx-auto space-x-3 py-10">
+      <div className="flex flex-wrap space-y-3 md:space-y-0 items-center justify-center w-full max-w-lg mx-auto space-x-3 py-10">
         <input placeholder="Search by course title..." className="flex h-9 w-full max-w-xs rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:text-white"
           type="text" onChange={(e) => setQuery(e.target.value)} />
         <Button onClick={handelSearch}>Search</Button>
-        <select defaultValue={searchParams.get('sort') ?? 'new'} className="flex h-9 w-full max-w-[80px] items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
-          onChange={(e) => setSearchParams({ sort: e.target.value })}>
+        <select defaultValue={searchParams.get('sort') ?? 'new'} className="flex h-12 w-full max-w-[90px]  items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
+          onChange={(e) => setSearchParams({ sort: e.target.value, title: deboucedQuery })}>
           <option className="bg-background " disabled>Sorting Options</option>
           <option className="bg-background" value="new">New</option>
           <option className="bg-background" value="old">Old</option>
@@ -55,15 +55,15 @@ function Index() {
       {isPending ?
         <div className="grid grid-cols-1 px-4 md:px-0 md:grid-cols-3 place-items-center gap-3 pb-20">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Card key={i} className="p-6 space-y-4 w-full max-w-md min-h-[130px]" >
-              <Skeleton className="w-40 h-4" />
+            <Card key={i} className="p-6 space-y-4 w-full max-w-md min-h-[100px]" >
+              <Skeleton className="w-28 h-4" />
               <Skeleton className="w-20 h-4" />
             </Card>))}
         </div>
-        : <div className="grid grid-cols-1 px-4 md:px-0 md:grid-cols-3 place-items-center gap-3 pb-20">
+        : <div className="grid grid-cols-1 px-4 md:px-0 sm:grid-cols-2 lg:grid-cols-3 place-items-center gap-3 pb-20">
           {data?.courses.map((course: course) => (
             <Link className="w-full" key={course._id} to={`/courses/${course._id}`}>
-              <Card className="p-6 space-y-4 w-full max-w-md min-h-[130px]" >
+              <Card className="p-6 space-y-4 w-full max-w-md min-h-[100px]" >
                 <CardTitle>{course.title}</CardTitle>
                 <CardDescription>Price: {course.price}$</CardDescription>
               </Card>

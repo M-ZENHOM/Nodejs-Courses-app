@@ -11,6 +11,8 @@ const { notFoundHandler, errorHandler } = require("./middlewares");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./utils/dbConnection");
 const app = express();
+const compression = require("compression");
+app.use(compression());
 
 connectDB();
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
