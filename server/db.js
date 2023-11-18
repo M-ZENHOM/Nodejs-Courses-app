@@ -1,14 +1,13 @@
-// const mongoose = require("mongoose");
-const MongoClient = require("mongodb").MongoClient;
+const mongoose = require("mongoose");
 
-// const connectDB = async () => {
-//   await mongoose
-//     .connect(process.env.MONGO_URL)
-//     .then(() => console.log("MongoDB Connected"))
-//     .catch((err) => console.log(err));
-// };
-
-export const client = new MongoClient(process.env.MONGO_URL);
-export const db = client.db();
+const db = async () => {
+  await mongoose
+    .connect(process.env.MONGO_URL)
+    .then(() => console.log("DB Connected"))
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
+};
 
 module.exports = db;
