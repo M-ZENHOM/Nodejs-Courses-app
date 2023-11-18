@@ -9,15 +9,11 @@ const express = require("express");
 const path = require("path");
 const { notFoundHandler, errorHandler } = require("./middlewares");
 const cookieParser = require("cookie-parser");
-const connectDB = require("./utils/dbConnection");
 const app = express();
-const compression = require("compression");
-app.use(compression());
 
-connectDB();
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(helmet());
