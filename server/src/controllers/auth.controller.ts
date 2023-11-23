@@ -1,10 +1,11 @@
-const User = require("../models/user.model");
-const { SUCCESS, FAIL } = require("../utils/statusText");
-const bcrypt = require("bcrypt");
-const { generateToken, asyncWrapper } = require("../middlewares");
-const errorMsg = require("../utils/errorMsg");
+import { Request, Response, NextFunction } from "express";
+import { asyncWrapper, generateToken } from "../middlewares";
+import { User } from "../models/user.model";
+import { errorMsg } from "../utils/errorMsg";
+import { FAIL, SUCCESS } from "../utils/statusText";
+import bcrypt from 'bcrypt'
 
-const register = asyncWrapper(async (req, res, next) => {
+export const register = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
   const { name, email, password, role } = req.body;
   const oldUser = await User.findOne({ email: email });
   if (oldUser) {
@@ -24,7 +25,7 @@ const register = asyncWrapper(async (req, res, next) => {
     .json({ status: SUCCESS, data: { user: "User created successfully" } });
 });
 
-const login = asyncWrapper(async (req, res, next) => {
+export const login = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email: email });
   if (!email && !password)
@@ -34,22 +35,23 @@ const login = asyncWrapper(async (req, res, next) => {
   if (!matchedPassword) return next(errorMsg(400, "Invalid password", FAIL));
   const token = await generateToken({
     email: user.email,
-    id: user._id,
+    id: user._id.toString(),
     role: user.role,
   });
-  const { password: pass, ...rest } = user._doc;
+  // const { password: pass, ...rest } = user._doc;
+  const { password: pass, ...rest } = user;
   res
     .cookie("access_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development", // Use secure cookies in production
-      sameSite: "None", // Prevent CSRF attacks  -  Was strict
+      sameSite: "none", // Prevent CSRF attacks  -  Was strict
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     })
     .status(200)
     .json({ status: SUCCESS, data: { user: rest } });
 });
 
-const logout = async (req, res, next) => {
+export const logout = async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.clearCookie("access_token");
     res
@@ -58,10 +60,4 @@ const logout = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
-
-module.exports = {
-  register,
-  login,
-  logout,
 };

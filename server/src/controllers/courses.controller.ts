@@ -1,20 +1,23 @@
-const Course = require("../models/course.model");
-const errorMsg = require("../utils/errorMsg");
-const { SUCCESS, FAIL } = require("../utils/statusText");
-const User = require("../models/user.model");
-const { asyncWrapper } = require("../middlewares");
+import { NextFunction, Request, Response } from "express";
+import { asyncWrapper } from "../middlewares";
+import { Course } from "../models/course.model";
+import { User } from "../models/user.model";
+import { errorMsg } from "../utils/errorMsg";
+import { FAIL, SUCCESS } from "../utils/statusText";
+import { searchQuerys } from "../types";
 
-const getAllCourses = asyncWrapper(async (req, res) => {
+
+export const getAllCourses = asyncWrapper(async (req: Request, res: Response) => {
   const { limit = 3, page = 1, title, sort = "new" } = req.query;
-  const query = {};
+  const query: searchQuerys = {};
   if (title) {
-    query.title = { $regex: title, $options: "i" };
+    query.title = { $regex: title as string, $options: "i" };
   }
   const count = await Course.countDocuments(query);
-  const totalPages = Math.ceil(count / limit);
+  const totalPages = Math.ceil(count / Number(limit));
   const courses = await Course.find(query, { __v: false })
-    .limit(limit)
-    .skip((page - 1) * limit)
+    .limit(Number(limit))
+    .skip((Number(page) - 1) * Number(limit))
     .sort({ createdAt: sort === "new" ? -1 : 1 });
 
   res.json({
@@ -23,19 +26,19 @@ const getAllCourses = asyncWrapper(async (req, res) => {
   });
 });
 
-const getUserCourses = asyncWrapper(async (req, res) => {
+export const getUserCourses = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
   const user = await User.findById(req.params.userId).populate(
     "courseList",
     "-__v"
   );
 
-  if (!user.courseList) {
+  if (!user?.courseList) {
     return next(errorMsg(404, "User doesn't have any courses!", FAIL));
   }
   res.json({ status: SUCCESS, data: { courses: user.courseList } });
 });
 
-const getCourse = asyncWrapper(async (req, res, next) => {
+export const getCourse = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
   const course = await Course.findById(req.params.courseId);
   if (!course) {
     return next(errorMsg(404, "Course not found", FAIL));
@@ -43,7 +46,7 @@ const getCourse = asyncWrapper(async (req, res, next) => {
   res.json({ status: SUCCESS, data: { course } });
 });
 
-const addCourse = asyncWrapper(async (req, res) => {
+export const addCourse = asyncWrapper(async (req: Request, res: Response) => {
   const newCourse = new Course({
     title: req.body.title,
     price: req.body.price,
@@ -57,7 +60,7 @@ const addCourse = asyncWrapper(async (req, res) => {
   res.status(201).json({ status: SUCCESS, data: { course: newCourse } });
 });
 
-const updateCourse = asyncWrapper(async (req, res) => {
+export const updateCourse = asyncWrapper(async (req: Request, res: Response) => {
   const course = await Course.updateOne(
     { _id: req.params.courseId },
     {
@@ -67,7 +70,7 @@ const updateCourse = asyncWrapper(async (req, res) => {
   res.status(200).json({ status: SUCCESS, data: { course } });
 });
 
-const deleteCourse = asyncWrapper(async (req, res) => {
+export const deleteCourse = asyncWrapper(async (req: Request, res: Response) => {
   await Course.deleteOne({ _id: req.params.courseId });
   await User.findByIdAndUpdate(
     req.headers.userid,
@@ -77,11 +80,3 @@ const deleteCourse = asyncWrapper(async (req, res) => {
   res.json({ status: SUCCESS, data: null });
 });
 
-module.exports = {
-  getAllCourses,
-  getCourse,
-  addCourse,
-  updateCourse,
-  deleteCourse,
-  getUserCourses,
-};
