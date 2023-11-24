@@ -9,6 +9,7 @@ import { Skeleton } from "../components/Skeleton"
 import Wrapper from "../components/Wrapper"
 import { useDebounce } from "../hooks/useDebounce"
 import { cn } from "../lib/utils"
+import SEO from "../lib/SEO"
 
 interface course {
   _id: string
@@ -78,6 +79,7 @@ function Index() {
           { "pointer-events-none opacity-50": Number(data?.pagination.page) === Number(data?.pagination.pages) || Number.isNaN(Number(data?.pagination.pages)) })}
           to={`?page=${Number(data?.pagination.page) + 1}${title}${sort}`} ><Icons.RightArrow /></Link>
       </div>
+      <SEO title="Courses Home Page" description="Courses Page" />
     </Wrapper >
   )
 }

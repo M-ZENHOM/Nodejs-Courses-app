@@ -11,6 +11,7 @@ import { useAppSelector } from "../store/hooks"
 import { cn } from "../lib/utils"
 import { toast } from "sonner"
 import { Skeleton } from "../components/Skeleton"
+import SEO from "../lib/SEO"
 
 interface CourseType {
     _id: string
@@ -64,6 +65,7 @@ export default function Profile() {
                         </Card>
                     )) : <p className="text-red-500 ">You don't have any courses ❌</p>}
             </div>}
+            <SEO title="Profile" description="Profile Page" />
         </Wrapper>
     )
 }

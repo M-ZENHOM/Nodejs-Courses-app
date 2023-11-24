@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "../../components/Skeleton";
+import SEO from "../../lib/SEO";
 
 interface Course {
     title: string
@@ -16,6 +17,7 @@ export default function CoursePage() {
     })
     return (
         <>
+            <SEO title={data?.title!} description="Course Page" />
             {isPending ? <div className="flex flex-col justify-center items-center space-y-3">
                 <Skeleton className="w-40 h-4" />
                 <Skeleton className="w-20 h-4" />
