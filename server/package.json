@@ -2,12 +2,11 @@
   "name": "session3",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "rimraf ./dist && npx tsc",
-    "prestart": "npm run build",
-    "start": "nodemon ./dist/index.js",
     "copy": "copyfiles src/uploads/*.* -u 2 dist/uploads/",
+    "build": "rimraf ./dist && npm run copy && npx tsc ",
+    "start": "npm run build && node ./dist/index.js",
     "dev": "concurrently \"tsc -w\"  \"nodemon ./dist/index.js\" \"npm run copy\""
   },
   "keywords": [],
