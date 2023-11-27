@@ -10,7 +10,6 @@
     "strict": true,
     "skipLibCheck": true,
     "typeRoots": ["./src/types"]
-  
   },
   "include": [
     "./*.js",
