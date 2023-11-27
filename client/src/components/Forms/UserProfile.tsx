@@ -9,11 +9,11 @@ import { cn } from "../../lib/utils"
 import { useAppDispatch } from "../../store/hooks"
 import { setUser } from "../../store/slices/userSlice"
 import { Button, buttonVariants } from "../Button"
+import DeleteUser from "../DeleteUser"
 import ErrorLabel from "../ErrorLabel"
 import { Input } from "../Input"
-import { Skeleton } from "../Skeleton"
-import DeleteUser from "../DeleteUser"
 import LogoutBtn from "../LogoutBtn"
+import { Skeleton } from "../Skeleton"
 
 export default function UserProfile({ userData, userDataPending }: { userData: { user: { _id: string, name: string, email: string, avatar: string } }, userDataPending: boolean }) {
     const dispatch = useAppDispatch();
@@ -36,6 +36,7 @@ export default function UserProfile({ userData, userDataPending }: { userData: {
                     name: res.data.data.user.name,
                     email: res.data.data.user.email
                 }))
+                window.location.reload()
             }).catch(error => toast.error(error.response.data.message))
         } catch (error) {
             return error
@@ -44,7 +45,7 @@ export default function UserProfile({ userData, userDataPending }: { userData: {
 
     return (
         <form className="flex flex-col justify-center items-center space-y-4 w-full max-w-xl" onSubmit={handleSubmit(onSubmit)}>
-            {userDataPending ? <Skeleton className="w-20 h-20 rounded-full" /> : <img className="w-20 h-20 rounded-full" src={`${import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:5000"}/uploads/${userData?.user.avatar ?? "profile.jpg"}`} />}
+            {userDataPending ? <Skeleton className="w-20 h-20 rounded-full" /> : <img className="w-20 h-20 rounded-full" src={`${userData?.user.avatar}`} />}
             <Input className="w-full max-w-xl" name="name" placeholder="Username" type="text" register={register} defaultValue={userData?.user.name} />
             {errors.name && <ErrorLabel>{errors.name.message}</ErrorLabel>}
             <Input className="w-full max-w-xl" name="email" placeholder="Email" type="email" register={register} defaultValue={userData?.user.email} />

@@ -3,7 +3,8 @@ import { FAIL, SUCCESS } from "../utils/statusText";
 import { errorMsg } from "../utils/errorMsg";
 import { User } from "../models/user.model";
 import { asyncWrapper } from "../middlewares/asyncWrapper";
-import { upload } from "../middlewares/uploadImages";
+import cloudinary, { cloudinaryDeleteImg } from "../utils/cloudinary";
+
 
 
 export const getUserInfo = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
@@ -18,17 +19,21 @@ export const getUserInfo = asyncWrapper(async (req: Request, res: Response, next
 });
 
 export const updateUser = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+
+  const profileAvatar = await cloudinary.uploader
+    .upload(req.file?.path!)
+    .then(result => result.secure_url)
+
   const user = await User.findByIdAndUpdate(req.params.userId, {
     name: req.body.name,
     email: req.body.email,
-    avatar: req.file?.filename,
-  }, {
-    new: true,
-  });
+    avatar: profileAvatar,
+  }, { new: true });
 
   if (!user) {
     return next(errorMsg(404, "User not found", FAIL));
   }
+
   const { password, ...rest } = user.toObject();
   res.json({ status: SUCCESS, data: { user: rest } });
 });

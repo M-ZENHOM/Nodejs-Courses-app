@@ -2,7 +2,6 @@ import multer from "multer";
 import { DestinationCallback, FileFilterCB, FileNameCallback } from "../types";
 import { Request } from "express";
 
-
 const storage = multer.diskStorage({
     destination: function (req: Request, file: Express.Multer.File, cb: DestinationCallback) {
         cb(null, "src/uploads");
