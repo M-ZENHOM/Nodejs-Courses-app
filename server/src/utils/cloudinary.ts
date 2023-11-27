@@ -1,3 +1,4 @@
+import { UploadApiResponse } from 'cloudinary';
 import { v2 as cloudinary } from 'cloudinary';
 
 cloudinary.config({
@@ -9,3 +10,5 @@ cloudinary.config({
 
 
 export default cloudinary
+
+export type CloudinaryUploadResponse = UploadApiResponse;

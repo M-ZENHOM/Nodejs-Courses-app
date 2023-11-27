@@ -3,9 +3,7 @@ import { FAIL, SUCCESS } from "../utils/statusText";
 import { errorMsg } from "../utils/errorMsg";
 import { User } from "../models/user.model";
 import { asyncWrapper } from "../middlewares/asyncWrapper";
-import cloudinary from "../utils/cloudinary";
-import { UploadApiResponse } from "cloudinary";
-
+import cloudinary, { CloudinaryUploadResponse } from "../utils/cloudinary";
 
 
 export const getUserInfo = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
@@ -23,7 +21,7 @@ export const updateUser = asyncWrapper(async (req: Request, res: Response, next:
 
   const profileAvatar = await cloudinary.uploader
     .upload(req.file?.path!)
-    .then((result: UploadApiResponse) => result.secure_url)
+    .then((result: CloudinaryUploadResponse) => result.secure_url)
 
   const user = await User.findByIdAndUpdate(req.params.userId, {
     name: req.body.name,
