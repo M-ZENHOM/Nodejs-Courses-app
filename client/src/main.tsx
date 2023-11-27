@@ -11,9 +11,11 @@ import ErrorPage from './pages/ErrorPage'
 import LoginPage from './pages/(auth)/login'
 import RegisterPage from './pages/(auth)/register'
 import CoursePage from './pages/course/page'
-import Profile from './pages/Profile'
+import Profile from './pages/(profile)/Profile'
 import CreateCourse from './pages/(CourseCrud)/CreateCourse'
 import UpdateCoursePage from './pages/(CourseCrud)/UpdateCourse'
+import UserCourses from './pages/(profile)/UserCourses'
+import Dashboard from './pages/(profile)/dashboard'
 
 
 
@@ -41,8 +43,18 @@ const router = createBrowserRouter([
         element: <CoursePage />,
       },
       {
-        path: "/profile",
-        element: <Profile />,
+        path: "/",
+        element: <Dashboard />,
+        children: [
+          {
+            path: "/profile",
+            element: <Profile />,
+          },
+          {
+            path: "/profile/courses",
+            element: <UserCourses />,
+          }
+        ]
       },
       {
         path: "/create-course",

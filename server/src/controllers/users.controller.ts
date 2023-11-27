@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { asyncWrapper } from "../middlewares";
 import { FAIL, SUCCESS } from "../utils/statusText";
 import { errorMsg } from "../utils/errorMsg";
 import { User } from "../models/user.model";
+import { asyncWrapper } from "../middlewares/asyncWrapper";
+import { upload } from "../middlewares/uploadImages";
 
 
 export const getUserInfo = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
@@ -17,14 +18,18 @@ export const getUserInfo = asyncWrapper(async (req: Request, res: Response, next
 });
 
 export const updateUser = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
-  const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
+  const user = await User.findByIdAndUpdate(req.params.userId, {
+    name: req.body.name,
+    email: req.body.email,
+    avatar: req.file?.filename,
+  }, {
     new: true,
   });
+
   if (!user) {
     return next(errorMsg(404, "User not found", FAIL));
   }
-  // const { password, ...rest } = user._doc;
-  const { password, ...rest } = user;
+  const { password, ...rest } = user.toObject();
   res.json({ status: SUCCESS, data: { user: rest } });
 });
 

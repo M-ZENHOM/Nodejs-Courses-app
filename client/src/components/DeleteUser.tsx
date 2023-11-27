@@ -16,9 +16,9 @@ const DeleteUser = ({ userId }: { userId: string }) => {
     return (
         <AlertDialog.Root>
             <AlertDialog.Trigger asChild>
-                <button className="text-red-500">
+                <Button variant="destructive">
                     Delete account
-                </button>
+                </Button>
             </AlertDialog.Trigger>
             <AlertDialog.Portal>
                 <AlertDialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0" />

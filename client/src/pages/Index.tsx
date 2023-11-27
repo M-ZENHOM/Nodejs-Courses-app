@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
-import { Button, buttonVariants } from "../components/Button"
+import { buttonVariants } from "../components/Button"
 import { Card, CardDescription, CardTitle } from "../components/Card"
 import { Icons } from "../components/Icons"
 import { Skeleton } from "../components/Skeleton"
 import Wrapper from "../components/Wrapper"
 import { useDebounce } from "../hooks/useDebounce"
-import { cn } from "../lib/utils"
 import SEO from "../lib/SEO"
+import { cn } from "../lib/utils"
 
 interface course {
   _id: string
@@ -20,6 +20,7 @@ type Courses = {
   pagination: {
     pages: number
     page: number
+    count: number
   }
   courses: course[]
 }
@@ -35,24 +36,30 @@ function Index() {
     queryKey: ['courses', searchParams.get('title'), searchParams.get('page'), searchParams.get('sort')],
     queryFn: () => axios.get(`${import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:5000"}/api/courses?limit=6${page}${title}${sort}`).then((response) => response.data.data),
   })
-  const handelSearch = () => {
-    if (deboucedQuery !== "")
+
+  useEffect(() => {
+    if (deboucedQuery !== "") {
       setSearchParams({ title: deboucedQuery, sort: searchParams.get('sort') ?? "new" })
-  }
+    } else {
+      setSearchParams({ sort: searchParams.get('sort') ?? "new" })
+    }
+  }, [deboucedQuery, sort])
+
+
   return (
     // Refactor Styles later!
     <Wrapper className="flex flex-col justify-center items-center pb-20" >
       <div className="flex flex-wrap space-y-3 md:space-y-0 items-center justify-center w-full max-w-lg mx-auto space-x-3 py-10">
-        <input placeholder="Search by course title..." className="flex h-9 w-full max-w-xs rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:text-white"
+        <input placeholder="Search by course title..." className="flex h-12 w-full max-w-sm rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:text-white"
           type="text" onChange={(e) => setQuery(e.target.value)} />
-        <Button onClick={handelSearch}>Search</Button>
         <select defaultValue={searchParams.get('sort') ?? 'new'} className="flex h-12 w-full max-w-[90px]  items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
-          onChange={(e) => setSearchParams({ sort: e.target.value, title: deboucedQuery })}>
+          onChange={(e) => setSearchParams({ sort: e.target.value })}>
           <option className="bg-background " disabled>Sorting Options</option>
           <option className="bg-background" value="new">New</option>
           <option className="bg-background" value="old">Old</option>
         </select>
       </div>
+      {data?.pagination.count === 0 && <p className="text-center text-red-500">No Courses Found</p>}
       {isPending ?
         <div className="grid grid-cols-1 px-4 md:px-0 md:grid-cols-3 place-items-center gap-3 pb-20">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -71,12 +78,13 @@ function Index() {
             </Link>
           ))}
         </div>}
+
       <div className="flex items-center space-x-4">
         <Link className={cn(buttonVariants({ variant: "outline" }),
-          { "pointer-events-none opacity-50": Number(data?.pagination.page) === 1 || Number.isNaN(Number(data?.pagination.pages)) })}
+          { "pointer-events-none opacity-50": Number(data?.pagination.page) === 1 || Number.isNaN(Number(data?.pagination.pages)) || data?.pagination.count === 0 })}
           to={`?page=${Number(data?.pagination.page) - 1}${title}${sort}`} ><Icons.LeftArrow /></Link>
         <Link className={cn(buttonVariants({ variant: "outline" }),
-          { "pointer-events-none opacity-50": Number(data?.pagination.page) === Number(data?.pagination.pages) || Number.isNaN(Number(data?.pagination.pages)) })}
+          { "pointer-events-none opacity-50": Number(data?.pagination.page) === Number(data?.pagination.pages) || Number.isNaN(Number(data?.pagination.pages)) || data?.pagination.count === 0 })}
           to={`?page=${Number(data?.pagination.page) + 1}${title}${sort}`} ><Icons.RightArrow /></Link>
       </div>
       <SEO title="Courses Home Page" description="Courses Page" />

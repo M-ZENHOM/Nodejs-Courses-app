@@ -1,7 +1,9 @@
 import { Router } from 'express'
 import { addCourse, deleteCourse, getAllCourses, getCourse, getUserCourses, updateCourse } from "../controllers/courses.controller";
-import { allowedTo, validator, verfiyToken } from "../middlewares";
 import { courseSchema } from '../schemas/courses.schema';
+import { verfiyToken } from '../middlewares/tokenHandlers';
+import { validator } from '../middlewares/validator';
+import { allowedTo } from '../middlewares/roleGurad';
 
 const router = Router();
 

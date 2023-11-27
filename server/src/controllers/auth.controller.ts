@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { asyncWrapper, generateToken } from "../middlewares";
 import { User } from "../models/user.model";
 import { errorMsg } from "../utils/errorMsg";
 import { FAIL, SUCCESS } from "../utils/statusText";
 import bcrypt from 'bcrypt'
+import { asyncWrapper } from "../middlewares/asyncWrapper";
+import { generateToken } from "../middlewares/tokenHandlers";
 
 export const register = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
   const { name, email, password, role } = req.body;
@@ -38,8 +39,7 @@ export const login = asyncWrapper(async (req: Request, res: Response, next: Next
     id: user._id.toString(),
     role: user.role,
   });
-  // const { password: pass, ...rest } = user._doc;
-  const { password: pass, ...rest } = user;
+  const { password: pass, ...rest } = user.toObject();
   res
     .cookie("access_token", token, {
       httpOnly: true,

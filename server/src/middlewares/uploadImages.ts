@@ -1,12 +1,11 @@
 import multer from "multer";
 import { DestinationCallback, FileFilterCB, FileNameCallback } from "../types";
-import { Request, Response, Router } from "express";
+import { Request } from "express";
 
-const router = Router();
 
 const storage = multer.diskStorage({
     destination: function (req: Request, file: Express.Multer.File, cb: DestinationCallback) {
-        cb(null, "src/uploads");
+        cb(null, "dist/uploads");
     },
     filename: function (req: Request, file: Express.Multer.File, cb: FileNameCallback) {
         const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -23,10 +22,4 @@ const fileFilter = function (req: Request, file: Express.Multer.File, cb: FileFi
         return cb(error, false);
     }
 };
-export const upload = multer({ storage: storage, fileFilter });
-
-router.post('/', upload.single('avatar'), (req: Request, res: Response) => {
-    res.json({ 'Image uploaded': req.file?.originalname })
-})
-
-export default router;
+export const upload = multer({ storage: storage, limits: { fileSize: 10 * 1024 * 1024 }, fileFilter });

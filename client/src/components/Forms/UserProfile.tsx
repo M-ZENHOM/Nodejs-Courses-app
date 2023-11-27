@@ -11,11 +11,11 @@ import { setUser } from "../../store/slices/userSlice"
 import { Button, buttonVariants } from "../Button"
 import ErrorLabel from "../ErrorLabel"
 import { Input } from "../Input"
-import LogoutBtn from "../LogoutBtn"
-import DeleteUser from "../DeleteUser"
 import { Skeleton } from "../Skeleton"
+import DeleteUser from "../DeleteUser"
+import LogoutBtn from "../LogoutBtn"
 
-export default function UserProfile({ userData, userDataPending }: { userData: { user: { _id: string, name: string, email: string, avatar: string } }, userDataPending: boolean }) {
+export default function UserProfile({ userData, userDataPending }: { userData: { user: { _id: string, name: string, email: string, avatar: {} } }, userDataPending: boolean }) {
     const dispatch = useAppDispatch();
     const {
         register,
@@ -27,12 +27,14 @@ export default function UserProfile({ userData, userDataPending }: { userData: {
         try {
             await axios.put(`${import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:5000"}/api/users/${userData.user._id}`, {
                 name: values.name,
-                email: values.email
-            }).then((res) => {
+                email: values.email,
+                avatar: values.avatar[0]
+
+            }, { headers: { "Content-Type": "multipart/form-data" } }).then((res) => {
                 dispatch(setUser({
                     _id: res.data.data.user._id,
                     name: res.data.data.user.name,
-                    email: res.data.data.user.email,
+                    email: res.data.data.user.email
                 }))
             }).catch(error => toast.error(error.response.data.message))
         } catch (error) {
@@ -41,15 +43,18 @@ export default function UserProfile({ userData, userDataPending }: { userData: {
     }
 
     return (
-        <form className="flex flex-col justify-center items-center space-y-4 w-full max-w-xs" onSubmit={handleSubmit(onSubmit)}>
-            {userDataPending ? <Skeleton className="w-20 h-20 rounded-full" /> : <img className="w-20 h-20 rounded-full" src={`${import.meta.env.VITE_API_URL}/${userData?.user.avatar}`} />}
-            <Input name="name" placeholder="Username" type="text" register={register} defaultValue={userData?.user.name} />
+        <form className="flex flex-col justify-center items-center space-y-4 w-full max-w-xl" onSubmit={handleSubmit(onSubmit)}>
+            {userDataPending ? <Skeleton className="w-20 h-20 rounded-full" /> : <img className="w-20 h-20 rounded-full" src={`${import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:5000"}/uploads/${userData?.user.avatar}`} />}
+            <Input className="w-full max-w-xl" name="name" placeholder="Username" type="text" register={register} defaultValue={userData?.user.name} />
             {errors.name && <ErrorLabel>{errors.name.message}</ErrorLabel>}
-            <Input name="email" placeholder="Email" type="email" register={register} defaultValue={userData?.user.email} />
+            <Input className="w-full max-w-xl" name="email" placeholder="Email" type="email" register={register} defaultValue={userData?.user.email} />
             {errors.email && <ErrorLabel>{errors.email.message}</ErrorLabel>}
-            <Button className="w-full max-w-xs" type="submit" >Update</Button>
+            {/* <Input className="w-full max-w-xl" name="avatar" placeholder="Images" type="file" register={register} /> */}
+            <input type="file"{...register("avatar")} />
+            {errors.avatar && <ErrorLabel>{(errors.avatar.message)?.toString()}</ErrorLabel>}
+            <Button className="w-full" type="submit" >Update</Button>
             <Link to="/create-course" className={cn(buttonVariants({ variant: "default" }), "w-full bg-green-500 hover:bg-green-700")}>Create Course</Link>
-            <div className="flex justify-between items-center w-full">
+            <div className="w-full flex justify-between space-x-5">
                 <DeleteUser userId={userData?.user._id} />
                 <LogoutBtn />
             </div>

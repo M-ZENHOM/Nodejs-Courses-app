@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: "uploads/profile.jpg",
+      default: "profile.jpg",
     },
     courseList: {
       type: [mongoose.Schema.Types.ObjectId],
@@ -36,5 +36,7 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+
 
 export const User = mongoose.model("User", userSchema);

@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { asyncWrapper } from "../middlewares";
 import { Course } from "../models/course.model";
 import { User } from "../models/user.model";
 import { errorMsg } from "../utils/errorMsg";
 import { FAIL, SUCCESS } from "../utils/statusText";
 import { searchQuerys } from "../types";
+import { asyncWrapper } from "../middlewares/asyncWrapper";
 
 
 export const getAllCourses = asyncWrapper(async (req: Request, res: Response) => {
