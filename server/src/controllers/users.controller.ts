@@ -3,7 +3,7 @@ import { FAIL, SUCCESS } from "../utils/statusText";
 import { errorMsg } from "../utils/errorMsg";
 import { User } from "../models/user.model";
 import { asyncWrapper } from "../middlewares/asyncWrapper";
-import cloudinary, { CloudinaryUploadResponse } from "../utils/cloudinary";
+import cloudinary, { CloudinaryUploadResponse } from "../utils/CloudinaryUP";
 
 
 export const getUserInfo = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
