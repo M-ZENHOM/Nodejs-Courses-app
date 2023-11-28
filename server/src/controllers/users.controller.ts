@@ -3,7 +3,6 @@ import { FAIL, SUCCESS } from "../utils/statusText";
 import { errorMsg } from "../utils/errorMsg";
 import { User } from "../models/user.model";
 import { asyncWrapper } from "../middlewares/asyncWrapper";
-import { getAssetInfo, uploadImage } from "../utils/uploadImg";
 
 
 export const getUserInfo = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
@@ -19,14 +18,14 @@ export const getUserInfo = asyncWrapper(async (req: Request, res: Response, next
 
 export const updateUser = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
 
-  const imgId = await uploadImage(req.file?.path!)
+  // const imgId = await uploadImage(req.file?.path!)
 
-  const profileAvatar = await getAssetInfo(imgId!)
+  // const profileAvatar = await getAssetInfo(imgId!)
 
   const user = await User.findByIdAndUpdate(req.params.userId, {
     name: req.body.name,
     email: req.body.email,
-    avatar: profileAvatar,
+    // avatar: profileAvatar,
   }, { new: true });
 
   if (!user) {

@@ -28,7 +28,7 @@ export default function UserProfile({ userData, userDataPending }: { userData: {
             await axios.put(`${import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:5000"}/api/users/${userData.user._id}`, {
                 name: values.name,
                 email: values.email,
-                avatar: values.avatar[0]
+                // avatar: values.avatar[0]
 
             }, { headers: { "Content-Type": "multipart/form-data" } }).then((res) => {
                 dispatch(setUser({
@@ -50,8 +50,8 @@ export default function UserProfile({ userData, userDataPending }: { userData: {
             {errors.name && <ErrorLabel>{errors.name.message}</ErrorLabel>}
             <Input className="w-full max-w-xl" name="email" placeholder="Email" type="email" register={register} defaultValue={userData?.user.email} />
             {errors.email && <ErrorLabel>{errors.email.message}</ErrorLabel>}
-            <Input className="w-full max-w-xl" name="avatar" placeholder="Profile Img" type="file" register={register} />
-            {errors.avatar && <ErrorLabel>{(errors.avatar.message)?.toString()}</ErrorLabel>}
+            {/* <Input className="w-full max-w-xl" name="avatar" placeholder="Profile Img" type="file" register={register} />
+            {errors.avatar && <ErrorLabel>{(errors.avatar.message)?.toString()}</ErrorLabel>} */}
             <Button className="w-full" type="submit" >Update</Button>
             <Link to="/create-course" className={cn(buttonVariants({ variant: "default" }), "w-full bg-green-500 hover:bg-green-700")}>Create Course</Link>
             <div className="w-full flex justify-between space-x-5">
