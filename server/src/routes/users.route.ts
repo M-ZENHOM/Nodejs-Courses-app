@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { deleteUser, getUserInfo, updateUser } from "../controllers/users.controller";
 import { verfiyToken } from '../middlewares/tokenHandlers';
-import { upload } from '../middlewares/uploadImages';
+import { upload } from '../middlewares/multerUpload';
 
 const router = Router();
 
