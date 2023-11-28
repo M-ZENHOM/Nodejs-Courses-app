@@ -1,4 +1,5 @@
-import { UploadApiResponse, v2 as cloudinary } from "cloudinary";
+/// <reference path="../types/cloudinary.d.ts" />
+import { v2 as cloudinary } from "cloudinary";
 
 
 cloudinary.config({
@@ -19,7 +20,7 @@ export const uploadImage = async (imagePath: string) => {
     };
 
     try {
-        const result: UploadApiResponse = await cloudinary.uploader.upload(imagePath, options);
+        const result = await cloudinary.uploader.upload(imagePath, options);
         return result.public_id;
     } catch (error) {
         console.error(error);
@@ -29,7 +30,7 @@ export const uploadImage = async (imagePath: string) => {
 
 export const getAssetInfo = async (publicId: string) => {
     try {
-        const result: UploadApiResponse = await cloudinary.api.resource(publicId);
+        const result = await cloudinary.api.resource(publicId);
         return result.secure_url;
     } catch (error) {
         console.error(error);
