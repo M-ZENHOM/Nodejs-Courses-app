@@ -15,7 +15,7 @@ export const app: Express = express();
 
 
 // app.use("/uploads", express.static(path.join(__dirname, "./uploads")));
-app.use("/uploads", express.static(path.join(__dirname, "../dist/uploads")));
+// app.use("/uploads", express.static(path.join(__dirname, "../dist/uploads")));
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.use(compression());
